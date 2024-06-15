@@ -1,0 +1,84 @@
+.avatar1
+{
+
+    background: linear-gradient(180deg, #FFDC82 0%, #FFC225 100%);
+
+}
+
+.avatar2
+{
+
+    background: linear-gradient(180deg, #FBAC9C 35%, #E94E3C 100%);
+
+}
+
+.avatar3
+{
+
+    background: linear-gradient(180deg, #8ED077 32.83%, #3B8816 100%);
+
+}
+
+.avatar4
+{
+
+    background: linear-gradient(180deg, #FF76C8 0%, #AE92FF 17.37%, #87B7FF 33%, #B3FF77 48.2%, #FFC076 72.86%, #FE7F7F 100%);
+
+}
+
+.avatar5
+{
+
+    background: linear-gradient(180deg, #82C3FF 0%, #369FFF 100%);
+
+}
+
+.avatar6
+{
+
+    background: linear-gradient(180deg, #FF9CFF 0%, #CE42FF 100%);
+
+}
+
+.seleccontainer
+{
+    display: flex;
+    width: 409px;
+    padding: 24px 32px;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 24px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    border-radius: 24px;
+    border: 1px solid #EBEBEB;
+    background: #FFF;
+    box-shadow: 0px -6px 0px 0px rgba(123, 127, 134, 0.15) inset;
+}
+
+.avataractive
+{
+    opacity: 1;
+    pointer-events: auto; /* Отключаем события мыши, включая щелчки и наведение */
+    cursor: pointer;
+}
+
+.avatarinactive
+{
+    opacity: 0.5;
+    pointer-events: auto; /* Отключаем события мыши, включая щелчки и наведение */
+    cursor: pointer;
+
+}
+
+.avatarinactive:hover
+{
+    opacity: 1;
+
+}
+
+.close
+{
+    pointer-events: auto; /* Отключаем события мыши, включая щелчки и наведение */
+    cursor: pointer;
+}

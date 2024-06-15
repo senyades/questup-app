@@ -1,0 +1,66 @@
+
+.navbar
+{
+    .nav
+{
+
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap:8px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    width: 250px;
+    svg path
+  {
+    fill: #6b7280
+  }
+}
+
+.nav:hover
+{
+    color: #000000;
+
+}
+.nav:hover svg path 
+{
+    fill: rgb(0, 0, 0); /* Цвет SVG при наведении */
+}
+
+  .nav:active
+{
+    background-color: #f9fafb;
+    color: #000000;
+
+}
+
+.nav.active 
+{
+  background-color: #f9fafb;
+  color: #000000;
+}
+.nav.active svg path {
+  fill: rgb(0, 0, 0); /* Цвет SVG при наведении */
+}
+
+.nav:active svg path {
+    fill: rgb(0, 0, 0); /* Цвет SVG при наведении */
+  }
+
+  .info
+  {
+    display: flex;
+    padding: 8px;
+    align-items: center;
+    gap: 16px;
+    align-self: stretch;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background: #FFF;
+    flex-direction: row;
+
+  }
+
+}

@@ -1,13 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import {BrowserRouter} from 'react-router-dom'
 import './index.css';
-import App from './App';
+import {App} from './App';
 import reportWebVitals from './reportWebVitals';
+import AuthProvider from "./context/AuthContext.jsx";
+import { SnackbarProvider } from 'notistack';
+import TestProvider from "./context/TestsContext.jsx";
+import InventoryProvider from './context/InventoryContext.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    
+     <SnackbarProvider>
+     <TestProvider>
+     <InventoryProvider>
+    <AuthProvider>
+    <BrowserRouter>
     <App />
+    </BrowserRouter>
+    </AuthProvider>
+    </InventoryProvider>
+    </TestProvider>
+    </SnackbarProvider>
   </React.StrictMode>
 );
 
