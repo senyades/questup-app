@@ -17,21 +17,25 @@ function Themespage_5({ testId }) {
 
       if(test_data[0][4].thema == 1 && thisthema != 0) {
         newthisThema(0);
+        
       }
 
       if(thisthema == 1 && test_data[0][4].thema == 1) {
-        updateTheme(5, 2);
+        await updateTheme(5, 2);
+        await GetTestData();
+
        
         console.log("Первая тема пройдена");
       }
 
       if(thisthema == 2 && test_data[0][4].thema == 2) {
-        updateTheme(5, 3);
+        await updateTheme(5, 3);
+        await GetTestData();
+
         console.log("Вторая тема пройдена");
       }
 
 
-      GetTestData();
 
       setIsLoading(false); // Все действия завершены, установка isLoading в false
     };

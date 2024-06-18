@@ -17,17 +17,15 @@ function Themespage_3({ testId }) {
 
       if(test_data[0][2].thema == 1 && thisthema != 0) {
         newthisThema(0);
+        
       }
 
       if(thisthema == 1 && test_data[0][2].thema == 1) {
-        updateTheme(3, 2);
-       
+        await updateTheme(3, 2);
+        await GetTestData();
+
         console.log("Первая тема пройдена");
       }
-
-
-
-      GetTestData();
 
       setIsLoading(false); // Все действия завершены, установка isLoading в false
     };

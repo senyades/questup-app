@@ -20,18 +20,20 @@ function Themespage_6({ testId }) {
       }
 
       if(thisthema == 1 && test_data[0][5].thema == 1) {
-        updateTheme(6, 2);
-       
+        await updateTheme(6, 2);
+        await GetTestData();
+
         console.log("Первая тема пройдена");
       }
 
       if(thisthema == 2 && test_data[0][5].thema == 2) {
-        updateTheme(6, 3);
+        await updateTheme(6, 3);
+        await GetTestData();
+
         console.log("Вторая тема пройдена");
       }
 
 
-      GetTestData();
 
       setIsLoading(false); // Все действия завершены, установка isLoading в false
     };

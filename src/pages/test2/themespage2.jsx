@@ -17,16 +17,18 @@ function Themespage_2({ testId }) {
 
       if(test_data[0][1].thema == 1 && thisthema != 0) {
         newthisThema(0);
+   
       }
 
       if(thisthema == 1 && test_data[0][1].thema == 1) {
-        updateTheme(2, 2);
-       
+        await updateTheme(2, 2);
+        await GetTestData();
         console.log("Первая тема пройдена");
       }
 
       if(thisthema == 2 && test_data[0][1].thema == 2) {
-        updateTheme(2, 3);
+        await updateTheme(2, 3);
+        await GetTestData();
         console.log("Вторая тема пройдена");
       }
 

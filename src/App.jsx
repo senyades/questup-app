@@ -29,6 +29,28 @@ function App() {
   const {data, isAppReady, isUserLogged, isTeacher } = useContext(AuthContext);
   
   const {updateAchive} = useContext(InventoryContext)
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Удаление обработчика при размонтировании компонента
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  if (screenWidth < 1100) {
+    return (
+      <div className='flex flex-col w-full h-full justify-center items-center'>
+        <h1>Адаптиной версии нет :(</h1>
+      </div>
+    );
+  }
 
  
   return (

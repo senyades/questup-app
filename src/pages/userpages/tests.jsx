@@ -40,7 +40,7 @@ function Tests() {
    
   }, []);
 
-  const buyblock = (testId, summ, isBlocked) =>
+  const buyblock = async (testId, summ, isBlocked) =>
   {
     try
     {
@@ -52,13 +52,14 @@ function Tests() {
           updateDiamonds({diamonds});
           enqueueSnackbar("Вы купили тест", { variant: 'success' });
           console.log(testId, isBlocked)
-          TestBlockedByUser({testId, isBlocked});
+          await TestBlockedByUser({testId, isBlocked});
+          await GetTestData();
+
         }
       else
       {
         enqueueSnackbar("Не хватает валюты", { variant: 'error' });
       }
-      GetTestData();
     }
     catch
     {

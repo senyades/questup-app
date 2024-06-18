@@ -14,28 +14,30 @@ function Themespage_1({ testId }) {
   useEffect(() => {
     const fetchDataAndProcess = async () => {
       handlePageChange(1);
+      GetTestData();
 
       if(test_data[0][0].thema == 1 && thisthema != 0) {
         newthisThema(0);
       }
 
       if(thisthema == 1 && test_data[0][0].thema == 1) {
-        updateTheme(1, 2);
-       
+        await updateTheme(1, 2);
+        await GetTestData();
         console.log("Первая тема пройдена");
       }
 
       if(thisthema == 2 && test_data[0][0].thema == 2) {
-        updateTheme(1, 3);
+        await updateTheme(1, 3);
+        await GetTestData();
         console.log("Вторая тема пройдена");
+
       }
 
       if(thisthema == 3 && test_data[0][0].thema == 3) {
-        updateTheme(1, 4);
+        await updateTheme(1, 4);
+        await GetTestData();
         console.log("Третья тема пройдена");
       }
-
-      GetTestData();
 
       setIsLoading(false); // Все действия завершены, установка isLoading в false
     };

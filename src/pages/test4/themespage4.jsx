@@ -21,17 +21,18 @@ function Themespage_4({ testId }) {
 
       if(thisthema == 1 && test_data[0][3].thema == 1) {
         updateTheme(4, 2);
-       
+        await GetTestData();
+
         console.log("Первая тема пройдена");
       }
 
       if(thisthema == 2 && test_data[0][3].thema == 2) {
-        updateTheme(4, 3);
+        await updateTheme(4, 3);
+        await GetTestData();
         console.log("Вторая тема пройдена");
       }
 
 
-      GetTestData();
 
       setIsLoading(false); // Все действия завершены, установка isLoading в false
     };
