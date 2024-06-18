@@ -55,7 +55,7 @@ function Firework({diamonds, exp, page, text}) {
           GetUserData(); 
           handlePageChange(page);
         }}>Далее</Button> </div>)}
-        {page==0 && (<NavLink to="/tests/play/1" className="w-44">  <Button onClick={() => { 
+        {page==0 && (<NavLink to="/tests" className="w-44">  <Button onClick={() => { 
           updateDiamonds({diamonds}); 
           updateExp({exp}); 
           setIsVisible(false); 

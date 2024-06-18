@@ -51,7 +51,7 @@ function Achievements() {
                 </div>
                 <div className="gap-2">
                   <p className="text-xl font-medium text-center">{achivList[0][0].name}</p>
-                  <p className="text-base text-center text-gray-400">Заработай 100 валюты</p>
+                  <p className="text-base text-center text-gray-400">Заработай 100 валюты за первую тему</p>
                 </div>
               </div>
 

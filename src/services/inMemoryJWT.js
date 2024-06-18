@@ -7,6 +7,7 @@ const inMemoryJWTService = () => {
   {
     inMemoryJWT = token;
     localStorage.setItem('inMemoryJWT', inMemoryJWT);
+    console.log(inMemoryJWT)
     refreshToken(tokenExpiration)
   };
 
@@ -14,11 +15,13 @@ const inMemoryJWTService = () => {
 
   const refreshToken =(expiration) => {
     const timeoutTrigger = expiration - 10000;
+    console.log("Время жизни токена:", timeoutTrigger)
 
     refreshTimeoutId = setTimeout(() => {
       AuthClient.post("/refresh").then((res)=> {
         const {accessToken, accessTokenExpiration} = res.data;
         setToken(accessToken, accessTokenExpiration);
+        console.log("Новые токены получены")
       })
       .catch(console.error);
     }, timeoutTrigger);

@@ -13,7 +13,7 @@ function Testpage_3() {
 
   return (
     <div className="flex flex-col h-full w-full items-center bg-[#f9fafb]">
-     <Header_Test GoLink={'/tests/play/1'}/>
+      <Header_Test GoLink={'/tests/play/1'}/>
       
       <div className="flex w-2/6 flex-row items-center h-full  gap-8 justify-center  ">
       {fireworkstrue === true && <Firework diamonds={4} exp={40} page={4} text={"Вы узнали правильный ответ"}/>}

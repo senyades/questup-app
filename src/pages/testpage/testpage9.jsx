@@ -8,26 +8,48 @@ import { NavLink } from "react-router-dom";
 import styles from "../testpage/testpage.module.scss";
 import Button from "../../components/buttons/button";
 import Firework from '../../components/molecule/fireworks';
+import { useSnackbar } from 'notistack'; // Import useSnackbar from notistack
 
 function Testpage_9() {
   const { test_data, updateTheme, handlePageChange} = useContext(TestContext);
   const [fireworkstrue, setFireworks] = useState(false);
   const { achivList, GetAchivList, updateAchive } = useContext(InventoryContext);
   const { data } = useContext(AuthContext);
+  const { enqueueSnackbar } = useSnackbar();
 
   
   const checkAchive = async () => {
     await GetAchivList();
-    console.log("Diamonds: ", data.inventory.diamonds); // Логируем значение
-    console.log("Achievement Status: ", achivList[0][0].got); // Логируем состояние достижения
 
-    if (data.inventory.diamonds > 100 && !achivList[0][0].got) {
-       updateAchive(1, true);
+    // Проверка наличия данных в data и achivList
+    if (data && data.inventory && Array.isArray(achivList) && achivList.length > 0) {
+        console.log("Diamonds: ", data.inventory.diamonds); // Логируем значение
+
+        if (Array.isArray(achivList[0]) && achivList[0].length > 0) {
+            console.log("Achievement Status: ", achivList[0][0].got); // Логируем состояние достижения
+
+            if (data.inventory.diamonds+14 > 100 && !achivList[0][0].got) {
+                updateAchive(1, true);
+                enqueueSnackbar("Вы получили достижение САМЫЙ БОГАТЫЙ ", { variant: 'success' });
+
+            }
+        } else {
+            console.error("achivList[0] is undefined or empty.");
+        }
+
+        if (Array.isArray(achivList[0]) && achivList[0].length > 1) {
+            if (!achivList[0][1].got) {
+                updateAchive(2, true);
+                enqueueSnackbar("Вы получили достижение НАЧАЛО ПОЛОЖЕНО", { variant: 'success' });
+            }
+        } else {
+            console.error("achivList[0][1] is undefined.");
+        }
+    } else {
+        console.error("Data or AchivList is undefined or empty.");
     }
-    if (!achivList[0][1].got) {
-       updateAchive(2, true);
-    }
-}
+};
+
 
 
   return (

@@ -51,32 +51,55 @@ function Dashboard() {
                 </div>
                 <div className={`${style.substrate} flex flex-col gap-2 h-80 w-full items-center justify-between `} >
 
-                  <div className="flex w-full flex-col items-center gap-2">
+                 
                   {data.inventory.exp<600 && 
+                   <div className="flex w-full flex-col items-center gap-2">
                         <div className="w-20 h-20">
                         <img src="\vendory\star-with-smile.png"/>
                       </div>
+                         <div className="flex flex-col w-full items-center">
+                         <span className="w-4/5 text-base text-gray-400 text-center font-normal">Твой уровень</span>
+                         <span className=" text-2xl font-medium text-center">Новичок</span>
+                       </div>
+                       </div>
                     }
-                    {data.inventory.exp<1200 && data.inventory.exp>600 &&
-                        <div className="w-20 h-20">
+                    {data.inventory.exp<2000 && data.inventory.exp>600 &&
+                    <div className="flex w-full flex-col items-center gap-2">
+                     <div className="w-20 h-20">
                         <img src="\vendory\bakalavr.png"/>
                       </div>
+                     <div className="flex flex-col w-full items-center">
+                     <span className="w-4/5 text-base text-gray-400 text-center font-normal">Твой уровень</span>
+                     <span className=" text-2xl font-medium text-center">Бакалавр</span>
+                   </div>
+                   </div>
+                       
                     }
-                     {data.inventory.exp<2000 && data.inventory.exp>1200 &&
-                        <div className="w-20 h-20">
+                     {data.inventory.exp<3000 && data.inventory.exp>2000 &&
+                     <div className="flex w-full flex-col items-center gap-2">
+                       <div className="w-20 h-20">
                         <img src="\vendory\magistr.png"/>
                       </div>
+                     <div className="flex flex-col w-full items-center">
+                     <span className="w-4/5 text-base text-gray-400 text-center font-normal">Твой уровень</span>
+                     <span className=" text-2xl font-medium text-center">Магистр</span>
+                   </div>
+                   </div>
+                      
                     }
-                     {data.inventory.exp<2500 && data.inventory.exp>2000 &&
-                        <div className="w-20 h-20">
+                     {data.inventory.exp<4000 && data.inventory.exp>3000 &&
+                     <div className="flex w-full flex-col items-center gap-2">
+                     <div className="w-20 h-20">
                         <img src="\vendory\aspirant.png"/>
                       </div>
+                   <div className="flex flex-col w-full items-center">
+                   <span className="w-4/5 text-base text-gray-400 text-center font-normal">Твой уровень</span>
+                   <span className=" text-2xl font-medium text-center">Аспирант</span>
+                 </div>
+                 </div>
+
+                       
                     }
-                      <div className="flex flex-col w-full items-center">
-                        <span className="w-4/5 text-base text-gray-400 text-center font-normal">Твой уровень</span>
-                        <span className=" text-2xl font-medium text-center">Новичок</span>
-                      </div>
-                  </div>
                
                 <NavLink to={'/levels'} className="w-full">
                 <ButtonGray>Подробнее</ButtonGray>

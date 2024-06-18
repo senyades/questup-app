@@ -10,6 +10,11 @@ import { Shop } from './pages/userpages/shop';
 import { Achievements } from './pages/userpages/achievements';
 import { Tests } from './pages/userpages/tests';
 import { Themespage_1 } from './pages/testpage/themespage_1'
+import { Themespage_2 } from './pages/test2/themespage2'
+import { Themespage_3 } from './pages/test3/themespage3'
+import { Themespage_4 } from './pages/test4/themespage4'
+import { Themespage_5 } from './pages/test5/themespage5'
+import { Themespage_6 } from './pages/test6/themespage6'
 import { Levels } from './pages/userpages/levels';
 import Modalachive from './components/molecule/modalachive'
 import { TestContext } from "./context/TestsContext";
@@ -49,7 +54,13 @@ function App() {
         <Route path="/shop" element={<Shop />} />
         <Route path="/tests" element={<Tests />} />
         <Route path="/tests/play/1" element={<Themespage_1 testId={1}/>} />
+        <Route path="/tests/play/2" element={<Themespage_2 testId={2}/>} />
+        <Route path="/tests/play/3" element={<Themespage_3 testId={3}/>} />
+        <Route path="/tests/play/4" element={<Themespage_4 testId={4}/>} />
+        <Route path="/tests/play/5" element={<Themespage_5 testId={5}/>} />
+        <Route path="/tests/play/6" element={<Themespage_6 testId={6}/>} />
         <Route path="/tests/play/1/testpage" element={<TestPages />} />
+        <Route path="/tests/play/2/testpage" element={<TestPages />} />
         {/* и так далее */}
       </>
         

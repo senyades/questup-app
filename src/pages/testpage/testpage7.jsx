@@ -98,7 +98,7 @@ const Testpage_7 = () => {
 
   return (
     <div className="flex flex-col h-full w-full items-center bg-[#f9fafb]">
-       <Header_Test GoLink={'/tests/play/1'}/>
+      <Header_Test GoLink={'/tests/play/1'}/>
       <div className="flex w-full flex-col items-center h-full gap-8 justify-center overflow-y-scroll">
       {fireworkstrue === true && <Firework diamonds={inventoryTestData.diamonds} exp={inventoryTestData.exp} page={9} text={"Вы ответили на тест"}/>}
       <div className="flex flex-col h-full items-center w-full">

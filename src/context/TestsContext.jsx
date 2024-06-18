@@ -93,8 +93,9 @@ function TestProvider({ children }){
         });
     };
 
+    
 
-      const TestBlocked = ({testId, isBlocked}) =>
+const TestBlocked = ({testId, isBlocked}) =>
         {
           console.log(testId, isBlocked)
           return ResourceClient.post("/update_blocked", {testId, isBlocked})
@@ -124,6 +125,65 @@ function TestProvider({ children }){
         });
         }
 
+
+const TestBlockedByUser = ({testId, isBlocked}) =>
+          {
+            console.log(testId, isBlocked)
+            return ResourceClient.post("/update_blocked_for_user", {testId, isBlocked})
+          .then((res) => {
+            if(isBlocked==true)
+              {
+                enqueueSnackbar(String("Тест заблокирован"), { variant: 'success' });
+              }
+              if(isBlocked==false)
+                {
+                  enqueueSnackbar(String("Тест разблокирован"), { variant: 'success' });
+                }
+              
+          })
+          .catch((error) => {
+            enqueueSnackbar(String("Ошибка отправки данных"), { variant: 'error' });
+            if (error.response.status === 401 || error.response.status === 403) {
+              // Обрабатываем ошибку 401 здесь
+              // Например, можно перенаправить пользователя на страницу входа или показать сообщение об ошибке
+              console.error("Ошибка ", error);
+            } 
+            else {
+              // Если это не ошибка 401, выбрасываем ошибку дальше для её обработки в вызывающем коде
+              console.error("Ошибка :", error);
+              throw error;
+            }
+          });
+          }
+
+          
+const TestView = ({testId, isView}) =>
+  {
+    console.log(testId, isView)
+    return ResourceClient.post("/update_view_status", {testId, isView})
+  .then((res) => {
+    if(isView==true)
+      {
+        enqueueSnackbar(String("Тест пройден"), { variant: 'success' });
+      }
+      
+  })
+  .catch((error) => {
+    enqueueSnackbar(String("Ошибка отправки данных"), { variant: 'error' });
+    if (error.response.status === 401 || error.response.status === 403) {
+      // Обрабатываем ошибку 401 здесь
+      // Например, можно перенаправить пользователя на страницу входа или показать сообщение об ошибке
+      console.error("Ошибка ", error);
+    } 
+    else {
+      // Если это не ошибка 401, выбрасываем ошибку дальше для её обработки в вызывающем коде
+      console.error("Ошибка :", error);
+      throw error;
+    }
+  });
+  }
+
+
         const handlePageChange = (pageNum) => {
           setCurrentPage(pageNum);
         };
@@ -144,7 +204,9 @@ function TestProvider({ children }){
           thisthema,
           newthisThema,
           viewTestPage,
-          newviewTestPage
+          newviewTestPage,
+          TestBlockedByUser,
+          TestView
 
         }}
       >

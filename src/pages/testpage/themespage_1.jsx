@@ -81,7 +81,7 @@ function Themespage_1({ testId }) {
           </div>
           {!isLoading&&
           <div className="flex flex-col gap-2 w-full">
-            <NavLink to={`/tests/play/1/testpage`} onClick={()=> {newthisThema(1)}} className={`${styles.themeblock} ${isActive(1, testId) && styles.active} ${isView(1) && styles.view}`}>Цифровая грамотность 
+            <NavLink to={`/tests/play/2/testpage`} onClick={()=> {newthisThema(1)}} className={`${styles.themeblock} ${isActive(1, testId) && styles.active} ${isView(1) && styles.view}`}>Цифровая грамотность 
             <div className={`${styles.infotext} flex flex-row gap-2 `}>
                         <div className="flex flex-row items-center gap-2 h-7 px-2 w border-slate-200 bg-slate-50 rounded-lg text-sm text-gray-400 text-center font-normal">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -168,6 +168,8 @@ function Themespage_1({ testId }) {
 
           </div>
           }
+          <span className="w-full bg-white rounded-lg text-gray-500 mb-8 text-center p-4 opacity-45">Внимание тест можно начать только один раз. При последующем запуске валюта не будет начисляться!</span>
+
       </div>
      
     </div>

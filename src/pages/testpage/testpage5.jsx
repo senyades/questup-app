@@ -13,7 +13,7 @@ function Testpage_5() {
 
   return (
     <div className="flex flex-col h-full w-full items-center bg-[#f9fafb]">
-       <Header_Test GoLink={'/tests/play/1'}/>
+      <Header_Test GoLink={'/tests/play/1'}/>
       <div className="flex  flex-row items-center h-full  gap-8 justify-center ">
       {fireworkstrue === true && <Firework diamonds={5} exp={25} page={6}/>}
             <img src="\vendory\Slide1.png" alt="" className={`${styles.img2}`} />

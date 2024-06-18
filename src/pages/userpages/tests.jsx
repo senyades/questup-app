@@ -4,27 +4,69 @@ import Header from '../../components/molecule/header';
 import Button from "../../components/buttons/button";
 import ButtonGray from "../../components/buttons/button_gray";
 import { TestContext } from "../../context/TestsContext";
+import { AuthContext } from "../../context/AuthContext";
+import { InventoryContext } from "../../context/InventoryContext";
 import { NavLink } from "react-router-dom";
 import styles from "./test.module.scss"
 import {Loader} from "../loader"
+import { useSnackbar } from 'notistack'; // Import useSnackbar from notistack
 
 function Tests() {
-  const { test_data, GetTestData, updateBlock, newviewTestPage, thisthema} = useContext(TestContext);
+  const { enqueueSnackbar } = useSnackbar();
+  const { test_data, GetTestData, updateBlock, newviewTestPage, thisthema, TestBlockedByUser} = useContext(TestContext);
+  const {updateDiamonds} = useContext(InventoryContext)
+  const {data} = useContext(AuthContext)
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       await GetTestData();
+     
+
       setTimeout(() => setLoading(false), 1000); // Задержка в 2 секунды перед скрытием лоадера
     };
 
     fetchData();
+
+    if((data.inventory.exp>2000) && (test_data[0][5].blocked == true))
+      {
+        TestBlockedByUser({testId: 6, isBlocked: false});
+      }
   }, []);
 
   useEffect(() => {
     newviewTestPage(false);
 
+   
   }, []);
+
+  const buyblock = (testId, summ, isBlocked) =>
+  {
+    try
+    {
+     
+      if(data.inventory.diamonds > 100)
+        {
+          const diamonds = summ;
+          console.log("Новое количество:", diamonds)
+          updateDiamonds({diamonds});
+          enqueueSnackbar("Вы купили тест", { variant: 'success' });
+          console.log(testId, isBlocked)
+          TestBlockedByUser({testId, isBlocked});
+        }
+      else
+      {
+        enqueueSnackbar("Не хватает валюты", { variant: 'error' });
+      }
+      GetTestData();
+    }
+    catch
+    {
+      enqueueSnackbar("Какая-то ошибка", { variant: 'error' });
+  
+    }
+   
+  }
 
 
   const isBlocked = (testId) => {
@@ -70,13 +112,13 @@ function Tests() {
                             </clipPath>
                           </defs>
                         </svg>
-                          +150
+                          +350
                           </div>
                         <div className="flex flex-row items-center gap-2 h-7 px-2 border-slate-200 bg-slate-50 rounded-lg text-sm text-gray-400 text-center font-normal">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                               <path d="M13.3661 7.84082L6.36608 15.3408C6.29189 15.42 6.19398 15.4729 6.0871 15.4915C5.98022 15.5101 5.87019 15.4935 5.77359 15.4441C5.677 15.3947 5.59909 15.3153 5.55162 15.2177C5.50415 15.1201 5.4897 15.0098 5.51045 14.9033L6.4267 10.3202L2.82483 8.96769C2.74747 8.93876 2.67849 8.89111 2.62404 8.82901C2.56959 8.76691 2.53138 8.69229 2.5128 8.61181C2.49423 8.53134 2.49589 8.44751 2.51761 8.36783C2.53934 8.28815 2.58047 8.2151 2.63733 8.15519L9.63733 0.655191C9.71151 0.576025 9.80942 0.523135 9.9163 0.504501C10.0232 0.485867 10.1332 0.502501 10.2298 0.551892C10.3264 0.601282 10.4043 0.680751 10.4518 0.778304C10.4992 0.875858 10.5137 0.986204 10.493 1.09269L9.5742 5.68082L13.1761 7.03144C13.2529 7.06057 13.3213 7.10816 13.3753 7.17002C13.4293 7.23187 13.4673 7.30608 13.4858 7.38609C13.5044 7.46609 13.5029 7.54943 13.4816 7.62874C13.4603 7.70805 13.4197 7.78089 13.3636 7.84082H13.3661Z" fill="#FFC225"/>
                             </svg>
-                          +100
+                          +1600
                           </div>
                       </div>
                     </div>
@@ -106,35 +148,68 @@ function Tests() {
                            </clipPath>
                          </defs>
                        </svg>
-                         +150
+                         +350
                          </div>
                        <div className="flex flex-row items-center gap-2 h-7 px-2 border-slate-200 bg-slate-50 rounded-lg text-sm text-gray-400 text-center font-normal">
                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                              <path d="M13.3661 7.84082L6.36608 15.3408C6.29189 15.42 6.19398 15.4729 6.0871 15.4915C5.98022 15.5101 5.87019 15.4935 5.77359 15.4441C5.677 15.3947 5.59909 15.3153 5.55162 15.2177C5.50415 15.1201 5.4897 15.0098 5.51045 14.9033L6.4267 10.3202L2.82483 8.96769C2.74747 8.93876 2.67849 8.89111 2.62404 8.82901C2.56959 8.76691 2.53138 8.69229 2.5128 8.61181C2.49423 8.53134 2.49589 8.44751 2.51761 8.36783C2.53934 8.28815 2.58047 8.2151 2.63733 8.15519L9.63733 0.655191C9.71151 0.576025 9.80942 0.523135 9.9163 0.504501C10.0232 0.485867 10.1332 0.502501 10.2298 0.551892C10.3264 0.601282 10.4043 0.680751 10.4518 0.778304C10.4992 0.875858 10.5137 0.986204 10.493 1.09269L9.5742 5.68082L13.1761 7.03144C13.2529 7.06057 13.3213 7.10816 13.3753 7.17002C13.4293 7.23187 13.4673 7.30608 13.4858 7.38609C13.5044 7.46609 13.5029 7.54943 13.4816 7.62874C13.4603 7.70805 13.4197 7.78089 13.3636 7.84082H13.3661Z" fill="#FFC225"/>
                            </svg>
-                         +100
+                         +1600
                          </div>
                      </div>
                    </div>
                    </div>
                    <span className="text-xl text-start font-medium"> Основы цифровой грамотности</span>
                    <span className="text-sm text-gray-500 font-normal">Тест связан с основными понятиями цифровой грамотности и базовыми правилами</span>
-                   <span className="text-sm text-gray-500 font-normal">~5 минут</span>
+                   <span className="text-sm text-gray-500 font-normal">~30 минут / Пройдено</span>
 
 
                   </NavLink>
                   }
                    {isBlocked(1) &&
                    <div className={`${styles.blocked}`}>
-                    
+                    <div className={`${styles.testblock} ${styles.view}`}>
+                   <div className="flex flex-row justify-between w-full">
+                    <img src="\vendory\computer2.png" alt="" className="w-20 h-20"/>
 
+                   <div className="flex flex-col items-end gap-2">
+                     <div className={`${styles.easy} text-sm`}>ПРОСТОЙ</div>
+                     <div className="flex flex-row  gap-2">
+                       <div className="flex flex-row items-center gap-2 h-7 px-2 w border-slate-200 bg-slate-50 rounded-lg text-sm text-gray-400 text-center font-normal">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                         <g clip-path="url(#clip0_251_188)">
+                           <circle cx="8" cy="8" r="8" fill="#439DD7"/>
+                         </g>
+                         <defs>
+                           <clipPath id="clip0_251_188">
+                             <rect width="16" height="16" fill="white"/>
+                           </clipPath>
+                         </defs>
+                       </svg>
+                         +350
+                         </div>
+                       <div className="flex flex-row items-center gap-2 h-7 px-2 border-slate-200 bg-slate-50 rounded-lg text-sm text-gray-400 text-center font-normal">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                             <path d="M13.3661 7.84082L6.36608 15.3408C6.29189 15.42 6.19398 15.4729 6.0871 15.4915C5.98022 15.5101 5.87019 15.4935 5.77359 15.4441C5.677 15.3947 5.59909 15.3153 5.55162 15.2177C5.50415 15.1201 5.4897 15.0098 5.51045 14.9033L6.4267 10.3202L2.82483 8.96769C2.74747 8.93876 2.67849 8.89111 2.62404 8.82901C2.56959 8.76691 2.53138 8.69229 2.5128 8.61181C2.49423 8.53134 2.49589 8.44751 2.51761 8.36783C2.53934 8.28815 2.58047 8.2151 2.63733 8.15519L9.63733 0.655191C9.71151 0.576025 9.80942 0.523135 9.9163 0.504501C10.0232 0.485867 10.1332 0.502501 10.2298 0.551892C10.3264 0.601282 10.4043 0.680751 10.4518 0.778304C10.4992 0.875858 10.5137 0.986204 10.493 1.09269L9.5742 5.68082L13.1761 7.03144C13.2529 7.06057 13.3213 7.10816 13.3753 7.17002C13.4293 7.23187 13.4673 7.30608 13.4858 7.38609C13.5044 7.46609 13.5029 7.54943 13.4816 7.62874C13.4603 7.70805 13.4197 7.78089 13.3636 7.84082H13.3661Z" fill="#FFC225"/>
+                           </svg>
+                         +1600
+                         </div>
+                     </div>
+                   </div>
+                   </div>
+                   <span className="text-xl text-start font-medium"> Основы цифровой грамотности</span>
+                   <span className="text-sm text-gray-500 font-normal">Тест связан с основными понятиями цифровой грамотности и базовыми правилами</span>
+                   <span className="text-sm text-gray-500 font-normal">~30 минут / Пройдено</span>
+
+
+                  </div>
                  </div>
                   }
                 </div>
 
                 <div onClick={()=> {updateBlock(2)}}>
                   {!isView(2) && !isBlocked(2) &&
-                    <NavLink to={`/tests/play/1`} className={`${styles.testblock}`}>
+                    <NavLink to={`/tests/play/2`} className={`${styles.testblock}`}>
                     <div className="flex flex-row justify-between w-full">
                         <img src="\vendory\cloud.png" alt="" className="w-20 h-20"/>
 
@@ -158,19 +233,19 @@ function Tests() {
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                               <path d="M13.3661 7.84082L6.36608 15.3408C6.29189 15.42 6.19398 15.4729 6.0871 15.4915C5.98022 15.5101 5.87019 15.4935 5.77359 15.4441C5.677 15.3947 5.59909 15.3153 5.55162 15.2177C5.50415 15.1201 5.4897 15.0098 5.51045 14.9033L6.4267 10.3202L2.82483 8.96769C2.74747 8.93876 2.67849 8.89111 2.62404 8.82901C2.56959 8.76691 2.53138 8.69229 2.5128 8.61181C2.49423 8.53134 2.49589 8.44751 2.51761 8.36783C2.53934 8.28815 2.58047 8.2151 2.63733 8.15519L9.63733 0.655191C9.71151 0.576025 9.80942 0.523135 9.9163 0.504501C10.0232 0.485867 10.1332 0.502501 10.2298 0.551892C10.3264 0.601282 10.4043 0.680751 10.4518 0.778304C10.4992 0.875858 10.5137 0.986204 10.493 1.09269L9.5742 5.68082L13.1761 7.03144C13.2529 7.06057 13.3213 7.10816 13.3753 7.17002C13.4293 7.23187 13.4673 7.30608 13.4858 7.38609C13.5044 7.46609 13.5029 7.54943 13.4816 7.62874C13.4603 7.70805 13.4197 7.78089 13.3636 7.84082H13.3661Z" fill="#FFC225"/>
                             </svg>
-                          +100
+                          +600
                           </div>
                       </div>
                     </div>
                     </div>
                     <span className="text-xl text-start font-medium"> Облачные технологии</span>
                     <span className="text-sm text-gray-500 font-normal">Задания по теме облачные технологии, основные понятия и способы взаимодействия</span>
-                    <span className="text-sm text-gray-500 font-normal">~5 минут</span>
+                    <span className="text-sm text-gray-500 font-normal">~15 минут</span>
                       
                   </NavLink>
                   }
                   {isView(2) &&
-                    <NavLink to={`/tests/play/1`} className={`${styles.testblock} ${styles.view}`}>
+                    <NavLink to={`/tests/play/2`} className={`${styles.testblock} ${styles.view}`}>
                     <div className="flex flex-row justify-between w-full">
                         <img src="\vendory\cloud.png" alt="" className="w-20 h-20"/>
 
@@ -194,14 +269,14 @@ function Tests() {
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                               <path d="M13.3661 7.84082L6.36608 15.3408C6.29189 15.42 6.19398 15.4729 6.0871 15.4915C5.98022 15.5101 5.87019 15.4935 5.77359 15.4441C5.677 15.3947 5.59909 15.3153 5.55162 15.2177C5.50415 15.1201 5.4897 15.0098 5.51045 14.9033L6.4267 10.3202L2.82483 8.96769C2.74747 8.93876 2.67849 8.89111 2.62404 8.82901C2.56959 8.76691 2.53138 8.69229 2.5128 8.61181C2.49423 8.53134 2.49589 8.44751 2.51761 8.36783C2.53934 8.28815 2.58047 8.2151 2.63733 8.15519L9.63733 0.655191C9.71151 0.576025 9.80942 0.523135 9.9163 0.504501C10.0232 0.485867 10.1332 0.502501 10.2298 0.551892C10.3264 0.601282 10.4043 0.680751 10.4518 0.778304C10.4992 0.875858 10.5137 0.986204 10.493 1.09269L9.5742 5.68082L13.1761 7.03144C13.2529 7.06057 13.3213 7.10816 13.3753 7.17002C13.4293 7.23187 13.4673 7.30608 13.4858 7.38609C13.5044 7.46609 13.5029 7.54943 13.4816 7.62874C13.4603 7.70805 13.4197 7.78089 13.3636 7.84082H13.3661Z" fill="#FFC225"/>
                             </svg>
-                          +100
+                          +600
                           </div>
                       </div>
                     </div>
                     </div>
                     <span className="text-xl text-start font-medium"> Облачные технологии</span>
                     <span className="text-sm text-gray-500 font-normal">Задания по теме облачные технологии, основные понятия и способы взаимодействия</span>
-                    <span className="text-sm text-gray-500 font-normal">~5 минут</span>
+                    <span className="text-sm text-gray-500 font-normal">~15 минут / Пройдено</span>
                       
                     </NavLink>
                   }
@@ -231,14 +306,14 @@ function Tests() {
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                               <path d="M13.3661 7.84082L6.36608 15.3408C6.29189 15.42 6.19398 15.4729 6.0871 15.4915C5.98022 15.5101 5.87019 15.4935 5.77359 15.4441C5.677 15.3947 5.59909 15.3153 5.55162 15.2177C5.50415 15.1201 5.4897 15.0098 5.51045 14.9033L6.4267 10.3202L2.82483 8.96769C2.74747 8.93876 2.67849 8.89111 2.62404 8.82901C2.56959 8.76691 2.53138 8.69229 2.5128 8.61181C2.49423 8.53134 2.49589 8.44751 2.51761 8.36783C2.53934 8.28815 2.58047 8.2151 2.63733 8.15519L9.63733 0.655191C9.71151 0.576025 9.80942 0.523135 9.9163 0.504501C10.0232 0.485867 10.1332 0.502501 10.2298 0.551892C10.3264 0.601282 10.4043 0.680751 10.4518 0.778304C10.4992 0.875858 10.5137 0.986204 10.493 1.09269L9.5742 5.68082L13.1761 7.03144C13.2529 7.06057 13.3213 7.10816 13.3753 7.17002C13.4293 7.23187 13.4673 7.30608 13.4858 7.38609C13.5044 7.46609 13.5029 7.54943 13.4816 7.62874C13.4603 7.70805 13.4197 7.78089 13.3636 7.84082H13.3661Z" fill="#FFC225"/>
                             </svg>
-                          +100
+                          +600
                           </div>
                       </div>
                     </div>
                     </div>
                     <span className="text-xl text-start font-medium"> Облачные технологии</span>
                     <span className="text-sm text-gray-500 font-normal">Задания по теме облачные технологии, основные понятия и способы взаимодействия</span>
-                    <span className="text-sm text-gray-500 font-normal">~5 минут</span>
+                    <span className="text-sm text-gray-500 font-normal">~15 минут</span>
                       
                     </div>
                   }
@@ -246,7 +321,7 @@ function Tests() {
 
                 <div onClick={()=> {updateBlock(3)}}>
                   {!isView(3) && !isBlocked(3) &&
-                    <NavLink to={`/tests/play/1`} className={`${styles.testblock}`}>
+                    <NavLink to={`/tests/play/3`} className={`${styles.testblock}`}>
                     <div className="flex flex-row justify-between w-full">
                        <img src="\vendory\information.png" alt="" className="w-20 h-20"/>
 
@@ -270,7 +345,7 @@ function Tests() {
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                               <path d="M13.3661 7.84082L6.36608 15.3408C6.29189 15.42 6.19398 15.4729 6.0871 15.4915C5.98022 15.5101 5.87019 15.4935 5.77359 15.4441C5.677 15.3947 5.59909 15.3153 5.55162 15.2177C5.50415 15.1201 5.4897 15.0098 5.51045 14.9033L6.4267 10.3202L2.82483 8.96769C2.74747 8.93876 2.67849 8.89111 2.62404 8.82901C2.56959 8.76691 2.53138 8.69229 2.5128 8.61181C2.49423 8.53134 2.49589 8.44751 2.51761 8.36783C2.53934 8.28815 2.58047 8.2151 2.63733 8.15519L9.63733 0.655191C9.71151 0.576025 9.80942 0.523135 9.9163 0.504501C10.0232 0.485867 10.1332 0.502501 10.2298 0.551892C10.3264 0.601282 10.4043 0.680751 10.4518 0.778304C10.4992 0.875858 10.5137 0.986204 10.493 1.09269L9.5742 5.68082L13.1761 7.03144C13.2529 7.06057 13.3213 7.10816 13.3753 7.17002C13.4293 7.23187 13.4673 7.30608 13.4858 7.38609C13.5044 7.46609 13.5029 7.54943 13.4816 7.62874C13.4603 7.70805 13.4197 7.78089 13.3636 7.84082H13.3661Z" fill="#FFC225"/>
                             </svg>
-                          +100
+                          +400
                           </div>
                       </div>
                     </div>
@@ -282,7 +357,7 @@ function Tests() {
                   </NavLink>
                   }
                   {isView(3) &&
-                      <NavLink to={`/tests/play/1`} className={`${styles.testblock} ${styles.view}`}>
+                      <NavLink to={`/tests/play/3`} className={`${styles.testblock} ${styles.view}`}>
                       <div className="flex flex-row justify-between w-full">
                          <img src="\vendory\information.png" alt="" className="w-20 h-20"/>
   
@@ -306,14 +381,14 @@ function Tests() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path d="M13.3661 7.84082L6.36608 15.3408C6.29189 15.42 6.19398 15.4729 6.0871 15.4915C5.98022 15.5101 5.87019 15.4935 5.77359 15.4441C5.677 15.3947 5.59909 15.3153 5.55162 15.2177C5.50415 15.1201 5.4897 15.0098 5.51045 14.9033L6.4267 10.3202L2.82483 8.96769C2.74747 8.93876 2.67849 8.89111 2.62404 8.82901C2.56959 8.76691 2.53138 8.69229 2.5128 8.61181C2.49423 8.53134 2.49589 8.44751 2.51761 8.36783C2.53934 8.28815 2.58047 8.2151 2.63733 8.15519L9.63733 0.655191C9.71151 0.576025 9.80942 0.523135 9.9163 0.504501C10.0232 0.485867 10.1332 0.502501 10.2298 0.551892C10.3264 0.601282 10.4043 0.680751 10.4518 0.778304C10.4992 0.875858 10.5137 0.986204 10.493 1.09269L9.5742 5.68082L13.1761 7.03144C13.2529 7.06057 13.3213 7.10816 13.3753 7.17002C13.4293 7.23187 13.4673 7.30608 13.4858 7.38609C13.5044 7.46609 13.5029 7.54943 13.4816 7.62874C13.4603 7.70805 13.4197 7.78089 13.3636 7.84082H13.3661Z" fill="#FFC225"/>
                               </svg>
-                            +100
+                            +400
                             </div>
                         </div>
                       </div>
                       </div>
                       <span className="text-xl text-start font-medium"> Информационная грамотность</span>
                       <span className="text-sm text-gray-500 font-normal">Основные понятия информационной грамотности, виды и базовые правила</span>
-                      <span className="text-sm text-gray-500 font-normal">~5 минут</span>
+                      <span className="text-sm text-gray-500 font-normal">~5 минут / Пройдено</span>
                        
                     </NavLink>
                   }
@@ -342,7 +417,7 @@ function Tests() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path d="M13.3661 7.84082L6.36608 15.3408C6.29189 15.42 6.19398 15.4729 6.0871 15.4915C5.98022 15.5101 5.87019 15.4935 5.77359 15.4441C5.677 15.3947 5.59909 15.3153 5.55162 15.2177C5.50415 15.1201 5.4897 15.0098 5.51045 14.9033L6.4267 10.3202L2.82483 8.96769C2.74747 8.93876 2.67849 8.89111 2.62404 8.82901C2.56959 8.76691 2.53138 8.69229 2.5128 8.61181C2.49423 8.53134 2.49589 8.44751 2.51761 8.36783C2.53934 8.28815 2.58047 8.2151 2.63733 8.15519L9.63733 0.655191C9.71151 0.576025 9.80942 0.523135 9.9163 0.504501C10.0232 0.485867 10.1332 0.502501 10.2298 0.551892C10.3264 0.601282 10.4043 0.680751 10.4518 0.778304C10.4992 0.875858 10.5137 0.986204 10.493 1.09269L9.5742 5.68082L13.1761 7.03144C13.2529 7.06057 13.3213 7.10816 13.3753 7.17002C13.4293 7.23187 13.4673 7.30608 13.4858 7.38609C13.5044 7.46609 13.5029 7.54943 13.4816 7.62874C13.4603 7.70805 13.4197 7.78089 13.3636 7.84082H13.3661Z" fill="#FFC225"/>
                               </svg>
-                            +100
+                            +400
                             </div>
                         </div>
                       </div>
@@ -358,7 +433,7 @@ function Tests() {
 
                 <div onClick={()=> {updateBlock(4)}}>
                   {!isView(4) && !isBlocked(4) &&
-                  <NavLink to={`/tests/play/1`} className={`${styles.testblock}`}>
+                  <NavLink to={`/tests/play/4`} className={`${styles.testblock}`}>
                     <div className="flex flex-row justify-between w-full">
                        <img src="\vendory\content.png" alt="" className="w-20 h-20"/>
 
@@ -389,14 +464,14 @@ function Tests() {
                     </div>
                     <span className="text-xl text-start font-medium"> Создание контента</span>
                     <span className="text-sm text-gray-500 font-normal">Методы создания контента, основные инструменты и способы освоения</span>
-                    <span className="text-sm text-gray-500 font-normal">~5 минут</span>
+                    <span className="text-sm text-gray-500 font-normal">~25 минут</span>
                      
                   </NavLink>
                   
                   }
                   {isView(4) &&
                       
-                  <NavLink to={`/tests/play/1`} className={`${styles.testblock} ${ styles.view}`}>
+                  <NavLink to={`/tests/play/4`} className={`${styles.testblock} ${ styles.view}`}>
                   <div className="flex flex-row justify-between w-full">
                      <img src="\vendory\content.png" alt="" className="w-20 h-20"/>
 
@@ -427,7 +502,7 @@ function Tests() {
                   </div>
                   <span className="text-xl text-start font-medium"> Создание контента</span>
                   <span className="text-sm text-gray-500 font-normal">Методы создания контента, основные инструменты и способы освоения</span>
-                  <span className="text-sm text-gray-500 font-normal">~5 минут</span>
+                  <span className="text-sm text-gray-500 font-normal">~25 минут</span>
                    
                 </NavLink>
                 
@@ -475,10 +550,10 @@ function Tests() {
                   {!isView(5) && !isBlocked(5) &&
                   <NavLink to={`/tests/play/5`} className={`${styles.testblock}`}>
                     <div className="flex flex-row justify-between w-full">
-                       <img src="\vendory\content.png" alt="" className="w-20 h-20"/>
+                       <img src="\vendory\brain.png" alt="" className="w-20 h-20"/>
 
                     <div className="flex flex-col items-end gap-2">
-                      <div className={`${styles.hard} text-sm`}>ВЫСОКИЙ</div>
+                      <div className={`${styles.middle} text-sm`}>СРЕДНИЙ</div>
                       <div className="flex flex-row  gap-2">
                         <div className="flex flex-row items-center gap-2 h-7 px-2 w border-slate-200 bg-slate-50 rounded-lg text-sm text-gray-400 text-center font-normal">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -491,20 +566,20 @@ function Tests() {
                             </clipPath>
                           </defs>
                         </svg>
-                          +150
+                          +300
                           </div>
                         <div className="flex flex-row items-center gap-2 h-7 px-2 border-slate-200 bg-slate-50 rounded-lg text-sm text-gray-400 text-center font-normal">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                               <path d="M13.3661 7.84082L6.36608 15.3408C6.29189 15.42 6.19398 15.4729 6.0871 15.4915C5.98022 15.5101 5.87019 15.4935 5.77359 15.4441C5.677 15.3947 5.59909 15.3153 5.55162 15.2177C5.50415 15.1201 5.4897 15.0098 5.51045 14.9033L6.4267 10.3202L2.82483 8.96769C2.74747 8.93876 2.67849 8.89111 2.62404 8.82901C2.56959 8.76691 2.53138 8.69229 2.5128 8.61181C2.49423 8.53134 2.49589 8.44751 2.51761 8.36783C2.53934 8.28815 2.58047 8.2151 2.63733 8.15519L9.63733 0.655191C9.71151 0.576025 9.80942 0.523135 9.9163 0.504501C10.0232 0.485867 10.1332 0.502501 10.2298 0.551892C10.3264 0.601282 10.4043 0.680751 10.4518 0.778304C10.4992 0.875858 10.5137 0.986204 10.493 1.09269L9.5742 5.68082L13.1761 7.03144C13.2529 7.06057 13.3213 7.10816 13.3753 7.17002C13.4293 7.23187 13.4673 7.30608 13.4858 7.38609C13.5044 7.46609 13.5029 7.54943 13.4816 7.62874C13.4603 7.70805 13.4197 7.78089 13.3636 7.84082H13.3661Z" fill="#FFC225"/>
                             </svg>
-                          +100
+                          +600
                           </div>
                       </div>
                     </div>
                     </div>
-                    <span className="text-xl text-start font-medium"> Создание контента</span>
-                    <span className="text-sm text-gray-500 font-normal">Методы создания контента, основные инструменты и способы освоения</span>
-                    <span className="text-sm text-gray-500 font-normal">~5 минут</span>
+                    <span className="text-xl text-start font-medium"> Проверка знаний</span>
+                    <span className="text-sm text-gray-500 font-normal">Дополнительные тесты по всем темам</span>
+                    <span className="text-sm text-gray-500 font-normal">~8 минут</span>
                      
                   </NavLink>
                   
@@ -513,7 +588,7 @@ function Tests() {
                       
                   <NavLink to={`/tests/play/5`} className={`${styles.testblock} ${ styles.view}`}>
                   <div className="flex flex-row justify-between w-full">
-                     <img src="\vendory\content.png" alt="" className="w-20 h-20"/>
+                     <img src="\vendory\brain.png" alt="" className="w-20 h-20"/>
 
                   <div className="flex flex-col items-end gap-2">
                     <div className={`${styles.hard} text-sm`}>ВЫСОКИЙ</div>
@@ -540,9 +615,9 @@ function Tests() {
                     </div>
                   </div>
                   </div>
-                  <span className="text-xl text-start font-medium"> Создание контента</span>
-                  <span className="text-sm text-gray-500 font-normal">Методы создания контента, основные инструменты и способы освоения</span>
-                  <span className="text-sm text-gray-500 font-normal">~5 минут</span>
+                  <span className="text-xl text-start font-medium"> Проверка знаний</span>
+                  <span className="text-sm text-gray-500 font-normal">Дополнительные тесты по всем темам</span>
+                  <span className="text-sm text-gray-500 font-normal">~8 минут / Пройдено</span>
                    
                 </NavLink>
                 
@@ -557,7 +632,7 @@ function Tests() {
                     </div>
                     <span>Этот блок заблокирован</span>
                       </div>
-                      <ButtonGray>Открыть за 100 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                      <ButtonGray onClick={()=> {buyblock(5, 100, false)}}>Открыть за 100 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                                                         <circle cx="11" cy="11" r="9" fill="#439DD7"/>
                                                       </svg>
                       </ButtonGray>
@@ -570,10 +645,10 @@ function Tests() {
                   {!isView(6) && !isBlocked(6) &&
                   <NavLink to={`/tests/play/6`} className={`${styles.testblock}`}>
                     <div className="flex flex-row justify-between w-full">
-                       <img src="\vendory\content.png" alt="" className="w-20 h-20"/>
+                       <img src="\vendory\brain-and-2.png" alt="" className="w-20 h-20"/>
 
                     <div className="flex flex-col items-end gap-2">
-                      <div className={`${styles.hard} text-sm`}>ВЫСОКИЙ</div>
+                      <div className={`${styles.easy} text-sm`}>ПРОСТОЙ</div>
                       <div className="flex flex-row  gap-2">
                         <div className="flex flex-row items-center gap-2 h-7 px-2 w border-slate-200 bg-slate-50 rounded-lg text-sm text-gray-400 text-center font-normal">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -597,21 +672,21 @@ function Tests() {
                       </div>
                     </div>
                     </div>
-                    <span className="text-xl text-start font-medium"> Создание контента</span>
-                    <span className="text-sm text-gray-500 font-normal">Методы создания контента, основные инструменты и способы освоения</span>
+                    <span className="text-xl text-start font-medium"> Дополнительный тест</span>
+                    <span className="text-sm text-gray-500 font-normal">Проверка знаний для самых опытных</span>
                     <span className="text-sm text-gray-500 font-normal">~5 минут</span>
                      
                   </NavLink>
                   
                   }
-                  {isView(5) &&
+                  {isView(6) &&
                       
                   <NavLink to={`/tests/play/6`} className={`${styles.testblock} ${ styles.view}`}>
                   <div className="flex flex-row justify-between w-full">
-                     <img src="\vendory\content.png" alt="" className="w-20 h-20"/>
+                     <img src="\vendory\brain-and-2.png" alt="" className="w-20 h-20"/>
 
                   <div className="flex flex-col items-end gap-2">
-                    <div className={`${styles.hard} text-sm`}>ВЫСОКИЙ</div>
+                    <div className={`${styles.easy} text-sm`}>ПРОСТОЙ</div>
                     <div className="flex flex-row  gap-2">
                       <div className="flex flex-row items-center gap-2 h-7 px-2 w border-slate-200 bg-slate-50 rounded-lg text-sm text-gray-400 text-center font-normal">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -635,14 +710,13 @@ function Tests() {
                     </div>
                   </div>
                   </div>
-                  <span className="text-xl text-start font-medium"> Создание контента</span>
-                  <span className="text-sm text-gray-500 font-normal">Методы создания контента, основные инструменты и способы освоения</span>
-                  <span className="text-sm text-gray-500 font-normal">~5 минут</span>
-                   
+                  <span className="text-xl text-start font-medium"> Дополнительный тест</span>
+                    <span className="text-sm text-gray-500 font-normal">Проверка знаний для самых опытных</span>
+                    <span className="text-sm text-gray-500 font-normal">~5 минут</span>
                 </NavLink>
                 
                   }
-                  {isBlocked(5) && 
+                  {isBlocked(6) && 
                     <div className={`${styles.blocked}`}>
                       <div className="flex flex-col items-center gap-4 h-full justify-center">
                       <div className={`${styles.blockicon}`}>
